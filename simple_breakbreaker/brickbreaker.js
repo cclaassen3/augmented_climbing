@@ -73,8 +73,8 @@ function drawBricks() {
 		for (r = 0; r < brickRowCount; r++) {
 			var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
 			var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
-			bricks[c][r].x = 0;
-			bricks[c][r].y = 0;
+			bricks[c][r].x = brickX;
+			bricks[c][r].y = brickY;
 			ctx.beginPath();
 			ctx.rect(brickX,brickY,brickWidth,brickHeight);
 			ctx.fillStyle = "#000000";
@@ -87,7 +87,31 @@ function drawBricks() {
 function collisionDetection() {
 	for (c = 0; c < brickColumnCount; c++) {
 		for (r = 0; r < brickRowCount; r++) {
-			var b = bricks[c][r]
+			var b = bricks[c][r];
+			var distX = Math.abs(x - b.x - brickWidth/2);
+			var distY = Math.abs(y - b.y - brickHeight/2);
+
+
+		    if (distX > (brickWidth / 2 + ballRadius)) {
+		        continue;
+		    }
+		    if (distY > (brickHeight / 2 + ballRadius)) {
+		        continue;
+		    }
+
+			if (distX <= (brickWidth/2)) {
+				dy = -dy;
+			}
+			if (distY <= (brickHeight/2)) {
+				dx = -dx;
+			}
+			//rect corners
+			var deltaX = distX - brickWidth/2;
+			var deltaY = distY - brickHeight/2;
+			if ((deltaX*deltaX + deltaY*deltaY) <= (ballRadius * ballRadius)) {
+				dx = -dx;
+				dy = -dy;
+			}
 		}
 	}
 }
@@ -104,6 +128,7 @@ function draw() {
 		paddleX += 5;
 	}
 
+
 	if (y + dy < ballRadius) {
 		dy = -dy;
 	} else if (y + dy > canvas.height - ballRadius) {
@@ -118,9 +143,10 @@ function draw() {
 	if (x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
 		dx = -dx;
 	}
+	collisionDetection();
 	x += dx;
 	y += dy;
-	
+
 }
 
 
