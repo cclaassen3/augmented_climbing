@@ -26,7 +26,7 @@ var bricks = [];
 for (c = 0; c < brickColumnCount; c++) {
 	bricks[c] = [];
 	for (r = 0; r < brickRowCount; r++) {
-		bricks[c][r] = {x:0, y:0};
+		bricks[c][r] = {x:0, y:0, uthere:true};
 	}
 }
 
@@ -69,6 +69,7 @@ function drawPaddle() {
 }
 
 function drawBricks() {
+	var count = 0;
 	for (c = 0; c < brickColumnCount; c++) {
 		for (r = 0; r < brickRowCount; r++) {
 			var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
@@ -77,10 +78,19 @@ function drawBricks() {
 			bricks[c][r].y = brickY;
 			ctx.beginPath();
 			ctx.rect(brickX,brickY,brickWidth,brickHeight);
-			ctx.fillStyle = "#000000";
+			if (bricks[c][r].uthere) {
+				ctx.fillStyle = "#000000";
+			} else {
+				count++;
+				ctx.fillStyle = "#eee";
+			}
 			ctx.fill();
 			ctx.closePath();
 		}
+	}
+	if (count == brickRowCount * brickColumnCount) {
+		alert("win");
+		document.location.reload();
 	}
 }
 
@@ -99,18 +109,27 @@ function collisionDetection() {
 		        continue;
 		    }
 
-			if (distX <= (brickWidth/2)) {
+			if (distX <= (brickWidth/2) && b.uthere) {
+				b.uthere = false;
+
 				dy = -dy;
+				return;
 			}
-			if (distY <= (brickHeight/2)) {
+			if (distY <= (brickHeight/2) && b.uthere) {
+				b.uthere = false;
 				dx = -dx;
+				return;
 			}
 			//rect corners
 			var deltaX = distX - brickWidth/2;
 			var deltaY = distY - brickHeight/2;
-			if ((deltaX*deltaX + deltaY*deltaY) <= (ballRadius * ballRadius)) {
+			if ((deltaX*deltaX + deltaY*deltaY) <= (ballRadius * ballRadius) && b.uthere) {
+				b.uthere = false;
 				dx = -dx;
 				dy = -dy;
+
+
+				return;
 			}
 		}
 	}
@@ -119,9 +138,10 @@ function collisionDetection() {
 function draw() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 
-	drawball();
 	drawPaddle();
 	drawBricks();
+	collisionDetection();
+	drawball();
 	if (leftPressed && paddleX > 0) {
 		paddleX -= 5;
 	} else if (rightPressed && paddleX < canvas.width  - paddleWidth) {
@@ -143,7 +163,6 @@ function draw() {
 	if (x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
 		dx = -dx;
 	}
-	collisionDetection();
 	x += dx;
 	y += dy;
 
