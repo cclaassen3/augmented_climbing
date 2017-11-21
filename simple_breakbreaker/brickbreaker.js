@@ -9,10 +9,13 @@ var ballRadius = 10;
 
 var paddleWidth = 75;
 var paddleHeight = 10;
-var paddleX = (canvas.width - paddleHeight) / 2;
+var paddleX1 = (canvas.width - paddleHeight) / 2 - 50;
+var paddleX2 = (canvas.width - paddleHeight) / 2 + 50;
 
-var leftPressed = false;
-var rightPressed = false;
+var left1Pressed = false;
+var right1Pressed = false;
+var left2Pressed = false;
+var right2Pressed = false;
 
 var brickRowCount = 3;
 var brickColumnCount = 5;
@@ -36,18 +39,28 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 
 function keyDownHandler(e) {
+	if (e.keyCode == 68) {
+		right1Pressed = true;
+	} else if (e.keyCode == 65) {
+		left1Pressed = true;
+	}
 	if (e.keyCode == 39) {
-		rightPressed = true;
+		right2Pressed = true;
 	} else if (e.keyCode == 37) {
-		leftPressed = true;
+		left2Pressed = true;
 	}
 }
 
 function keyUpHandler(e) {
+	if (e.keyCode == 68) {
+		right1Pressed = false;
+	} else if (e.keyCode == 65) {
+		left1Pressed = false;
+	}
 	if (e.keyCode == 39) {
-		rightPressed = false;
+		right2Pressed = false;
 	} else if (e.keyCode == 37) {
-		leftPressed = false;
+		left2Pressed = false;
 	}
 }
 
@@ -60,10 +73,16 @@ function drawball() {
 	ctx.closePath();
 }
 
-function drawPaddle() {
+function drawPaddles() {
 	ctx.beginPath();
-	ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+	ctx.rect(paddleX1, canvas.height - paddleHeight, paddleWidth, paddleHeight);
 	ctx.fillStyle = "#000000";
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.beginPath();
+	ctx.rect(paddleX2, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+	ctx.fillStyle = "#ff0";
 	ctx.fill();
 	ctx.closePath();
 }
@@ -138,21 +157,26 @@ function collisionDetection() {
 function draw() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 
-	drawPaddle();
+	drawPaddles();
 	drawBricks();
 	collisionDetection();
 	drawball();
-	if (leftPressed && paddleX > 0) {
-		paddleX -= 5;
-	} else if (rightPressed && paddleX < canvas.width  - paddleWidth) {
-		paddleX += 5;
+	if (left1Pressed && paddleX1 > 0) {
+		paddleX1 -= 5;
+	} else if (right1Pressed && paddleX1 < canvas.width  - paddleWidth && paddleX1 < paddleX2 - paddleWidth) {
+		paddleX1 += 5;
+	}
+	if (left2Pressed && paddleX2 > 0 && paddleX2 > paddleX1 + paddleWidth) {
+		paddleX2 -= 5;
+	} else if (right2Pressed && paddleX2 < canvas.width  - paddleWidth) {
+		paddleX2 += 5;
 	}
 
 
 	if (y + dy < ballRadius) {
 		dy = -dy;
 	} else if (y + dy > canvas.height - ballRadius) {
-		if (x > paddleX && x < paddleX + paddleWidth) {
+		if ((x > paddleX1 && x < paddleX1 + paddleWidth) || (x > paddleX2 && x < paddleX2 + paddleWidth)) {
 			dy = -dy;
 		} else {
 			alert("you goofed");
