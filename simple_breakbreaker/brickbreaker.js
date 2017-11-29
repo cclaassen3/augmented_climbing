@@ -25,6 +25,8 @@ var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 
+var influencex = .8;
+
 var bricks = [];
 for (c = 0; c < brickColumnCount; c++) {
 	bricks[c] = [];
@@ -173,11 +175,24 @@ function draw() {
 	}
 
 
+
 	if (y + dy < ballRadius) {
 		dy = -dy;
 	} else if (y + dy > canvas.height - ballRadius) {
-		if ((x > paddleX1 && x < paddleX1 + paddleWidth) || (x > paddleX2 && x < paddleX2 + paddleWidth)) {
+		if ((x > paddleX1 - 2 && x < paddleX1 + paddleWidth + 2)) {
+			var speedxy = Math.sqrt(dx*dx + dy*dy);
+			var posx = (x - paddleX1) - (paddleWidth / 2);
+			console.log(speedxy);
+			dx = speedxy * influencex * (posx > 0? 1 : -1);
 			dy = -dy;
+			// dy = Math.sqrt(speedxy*speedxy - dx*dx) * (dy > 0? -1 : 1);
+		} else if ((x > paddleX2 - 2 && x < paddleX2 + paddleWidth + 2)) {
+			var speedxy = Math.sqrt(dx*dx + dy*dy);
+			var posx = (x - paddleX2) - (paddleWidth / 2);
+			console.log(speedxy);
+			dx = speedxy * influencex * (posx > 0? 1 : -1);;
+			dy = -dy;
+			// dy = Math.sqrt(speedxy*speedxy - dx*dx) * (dy > 0? -1 : 1);
 		} else {
 			alert("you goofed");
 			document.location.reload();
