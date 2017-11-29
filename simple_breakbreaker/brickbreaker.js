@@ -7,7 +7,7 @@ var dx = 2;
 var dy = -2;
 var ballRadius = 10;
 
-var paddleWidth = 75;
+var paddleWidth = 50;
 var paddleHeight = 10;
 var paddleX1 = (canvas.width - paddleHeight) / 2 - 50;
 var paddleX2 = (canvas.width - paddleHeight) / 2 + 50;
@@ -110,7 +110,7 @@ function drawBricks() {
 		}
 	}
 	if (count == brickRowCount * brickColumnCount) {
-		alert("win");
+		alert("You Win!");
 		document.location.reload();
 	}
 }
@@ -179,14 +179,14 @@ function draw() {
 	if (y + dy < ballRadius) {
 		dy = -dy;
 	} else if (y + dy > canvas.height - ballRadius) {
-		if ((x > paddleX1 - 2 && x < paddleX1 + paddleWidth + 2)) {
+		if ((x > paddleX1 - 5 && x < paddleX1 + paddleWidth + 5)) {
 			var speedxy = Math.sqrt(dx*dx + dy*dy);
 			var posx = (x - paddleX1) - (paddleWidth / 2);
 			console.log(speedxy);
 			dx = speedxy * influencex * (posx > 0? 1 : -1);
 			dy = -dy;
 			// dy = Math.sqrt(speedxy*speedxy - dx*dx) * (dy > 0? -1 : 1);
-		} else if ((x > paddleX2 - 2 && x < paddleX2 + paddleWidth + 2)) {
+		} else if ((x > paddleX2 - 5 && x < paddleX2 + paddleWidth + 5)) {
 			var speedxy = Math.sqrt(dx*dx + dy*dy);
 			var posx = (x - paddleX2) - (paddleWidth / 2);
 			console.log(speedxy);
@@ -194,7 +194,7 @@ function draw() {
 			dy = -dy;
 			// dy = Math.sqrt(speedxy*speedxy - dx*dx) * (dy > 0? -1 : 1);
 		} else {
-			alert("you goofed");
+			alert("You Lose!");
 			document.location.reload();
 
 		}
