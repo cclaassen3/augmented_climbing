@@ -1,3 +1,5 @@
-# augmented climbing
+# Augmented Climbing
 
-augmented climbing experience using kinect technology to project interactive games onto a climbing wall
+Augmented Climbing experience using kinect technology to project interactive games onto a climbing wall.
+
+
