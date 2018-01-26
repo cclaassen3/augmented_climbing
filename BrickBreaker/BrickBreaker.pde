@@ -1,5 +1,6 @@
 Ball ball;
-Platform platform;
+Platform platform1;
+Platform platform2;
 Brick bricks[];
 
 PFont f;
@@ -17,7 +18,7 @@ void setup() {
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
-  numBricks = 12;
+  numBricks = 24;
   level     = 1;
   initialize();
 }
@@ -34,18 +35,22 @@ void draw() {
     }
     if (bricksBroken == bricks.length)
       completeLevel();
-    ball.detectCollision(platform); 
+    ball.detectCollision(platform1); 
+    ball.detectCollision(platform2); 
     ball.display();
     ball.move();
-    platform.display();
-    platform.move();
+    platform1.display();
+    platform2.display();
+    platform1.move();
+    platform2.move();
     drawLives();
   } else {
       if (--lives == 0) {
         gameOver();
       } else {
         ball.returnToOrigin();
-        platform.returnToOrigin();
+        platform1.returnToOrigin();
+        platform2.returnToOrigin();
       }
   }  
 }
@@ -77,7 +82,8 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
   ball     = new Ball(new Vector(width/2,339), new Vector(2,-2), 10, color(0,0,255));
-  platform = new Platform(new Vector(width/2-30,350), new Vector(3,0), 60, 10, color(128,128,128));
+  platform1 = new Platform(new Vector(width/2+30,350), new Vector(3,0), 60, 10, color(128,128,128), 1);
+  platform2 = new Platform(new Vector(width/2-90,350), new Vector(3,0), 60, 10, color(128,128,128), 2);
   paused   = false;
   gameOver = false;
   lives    = 3;
@@ -88,18 +94,21 @@ void initialize() {
   bricks = new Brick[numBricks];
   
   for (int i = 0; i < bricks.length; i++)
-    bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0));
+    if (i % 5 > 0) {
+       bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0));
+    } else {
+      bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,255,0));
+    }
 }
 
 //determine whether the ball has fallen under the platform
 boolean died() {
   Vector bLoc = ball.getLocation();      //ball location
-  Vector pLoc = platform.getLocation();  //platform location
+  Vector pLoc1 = platform1.getLocation();  //platform 1 location
+  Vector pLoc2 = platform2.getLocation();  //platform 2 location
   
-  if (bLoc.x < 0 && bLoc.y > pLoc.y)
-    return true; 
-  else if (bLoc.x > width && bLoc.y > pLoc.y)
-    return true;
+  if (bLoc.x < 0 || bLoc.x > width)
+    return (bLoc.y > pLoc1.y) || (bLoc.y > pLoc2.y);
   else if (bLoc.y > height)
     return true;
   else

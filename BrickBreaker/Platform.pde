@@ -5,13 +5,15 @@ class Platform {
   float pWidth;    //platform width (determines size in x-direction)
   float pLength;   //platform length (determines size in y-direction)
   color c;
+  int n;
   
-  public Platform(Vector l, Vector v, float w, float len, color c) {
+  public Platform(Vector l, Vector v, float w, float len, color c, int num) {
     location = l;
     velocity = v;
     pWidth   = w;
     pLength  = len;
     this.c   = c;
+    n = num;
   }
   
   //draws the platform
@@ -23,14 +25,20 @@ class Platform {
   //move the platform
   void move() {
     if (keyPressed) {
-      if (key == CODED) {
+      if (n == 1) {
         if (keyCode == RIGHT)
           moveRight();     
-          
         if (keyCode == LEFT)
           moveLeft();
+        
       }
-    } 
+      if (n == 2) {
+        if (key == 'd')
+            moveRight(); 
+        if (key == 'a')
+            moveLeft();
+      }
+    }
   }
   
   //move the platform to the right
@@ -62,7 +70,7 @@ class Platform {
   
   //return the platform to it's starting position - in the middle of the screen
   void returnToOrigin() {
-    this.setLocation(new Vector(width/2 - pLength, 350));
+    this.setLocation(new Vector(width/2 + 30 - (120 * (n-1)), 350));
   }
   
   //set the location
