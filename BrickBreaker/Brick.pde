@@ -5,13 +5,15 @@ class Brick {
   float bLength;  //brick length
   color c;
   boolean broken;
+  int hardness;
 
-  public Brick(Vector l, float w, float len, color c) {
+  public Brick(Vector l, float w, float len, color c, int h) {
     location = l;
     bWidth   = w;
     bLength  = len;
     this.c   = c;
     broken   = false;
+    hardness = h;
   }
  
   void display() {

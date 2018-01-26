@@ -89,9 +89,9 @@ void initialize() {
   
   for (int i = 0; i < bricks.length; i++)
     if (i % 5 > 0) {
-       bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0));
+       bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0), 1);
     } else {
-      bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,255,0));
+      bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,255,0), 2);
     }
 }
 

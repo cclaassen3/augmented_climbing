@@ -52,6 +52,10 @@ class Ball {
     if ((this.location.x + radius >= bLoc.x && this.location.x + radius <= bLoc.x + b.getWidth()) &&
         (this.location.y + radius >= bLoc.y && this.location.y - radius <= bLoc.y + b.getLength())) {
            velocity.y *= -1;
+           if (b.hardness > 1) {
+             b.hardness--;
+             return false;
+           }
            b.breakBrick();
            return true;
     }
