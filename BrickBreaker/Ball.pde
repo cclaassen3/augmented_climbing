@@ -39,9 +39,31 @@ class Ball {
   void detectCollision(Platform p) {
     Vector pLoc = p.getLocation();
    
-    if ((this.location.x + radius >= pLoc.x && this.location.x + radius <= pLoc.x + p.getWidth()) &&
-        (this.location.y + radius >= pLoc.y && this.location.y - radius <= pLoc.y + p.getLength())) {
-           velocity.y *= -1;
+    //if ((this.location.x + radius >= pLoc.x && this.location.x + radius <= pLoc.x + p.getWidth()) &&
+    //    (this.location.y + radius >= pLoc.y && this.location.y - radius <= pLoc.y + p.getLength())) {
+    //       velocity.y *= -1;
+    //}
+    
+    float distX = abs(this.location.x - pLoc.x - p.getWidth()/2);
+    float distY = abs(this.location.y - pLoc.y - p.getLength()/2);
+    
+    // no collision
+    if ((distX > p.getWidth()/2 + radius) || (distY > p.getLength()/2 + radius)) {
+        return;
+    }
+    
+    
+    if (distX <= p.getWidth()/2) {
+        velocity.y *= -1; 
+    }
+    if (distY <= p.getLength()/2) {
+        velocity.x *= -1; 
+    } 
+    float deltaX = distX - p.getWidth()/2;
+    float deltaY = distY - p.getLength()/2;
+    if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
+       velocity.x *= -1;
+       velocity.y *= -1;
     }
   }
  

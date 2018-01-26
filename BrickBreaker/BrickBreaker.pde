@@ -35,14 +35,15 @@ void draw() {
     }
     if (bricksBroken == bricks.length)
       completeLevel();
-    ball.detectCollision(platform1); 
-    ball.detectCollision(platform2); 
-    ball.display();
-    ball.move();
     platform1.display();
     platform2.display();
     platform1.move();
     platform2.move();
+    ball.detectCollision(platform1); 
+    ball.detectCollision(platform2); 
+    ball.display();
+    ball.move();
+    
     drawLives();
   } else {
       if (--lives == 0) {
