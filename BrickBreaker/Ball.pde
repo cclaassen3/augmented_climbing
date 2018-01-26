@@ -39,8 +39,8 @@ class Ball {
   void detectCollision(Platform p) {
     Vector pLoc = p.getLocation();
    
-    if ((this.location.x + radius >= pLoc.x && this.location.x + radius <= pLoc.x + p.getWidth() + 1) &&
-        (this.location.y + radius >= pLoc.y && this.location.y - radius <= pLoc.y + p.getLength() + 1)) {
+    if ((this.location.x + radius >= pLoc.x && this.location.x + radius <= pLoc.x + p.getWidth()) &&
+        (this.location.y + radius >= pLoc.y && this.location.y - radius <= pLoc.y + p.getLength())) {
            velocity.y *= -1;
     }
   }
@@ -48,16 +48,39 @@ class Ball {
   //determine if the ball has collided with a brick
   boolean detectCollision(Brick b) {
     Vector bLoc = b.getLocation();
-   
-    if ((this.location.x + radius >= bLoc.x && this.location.x + radius <= bLoc.x + b.getWidth()) &&
-        (this.location.y + radius >= bLoc.y && this.location.y - radius <= bLoc.y + b.getLength())) {
-           velocity.y *= -1;
-           if (b.hardness > 1) {
+    
+    float distX = abs(this.location.x - bLoc.x - b.getWidth()/2);
+    float distY = abs(this.location.y - bLoc.y - b.getLength()/2);
+    
+    // no collision
+    if ((distX > b.getWidth()/2 + radius) || (distY > b.getLength()/2 + radius)) {
+        return false;
+    }
+    
+    boolean hit = false;
+    
+    if (distX <= b.getWidth()/2) {
+        velocity.y *= -1; 
+        hit = true;
+    }
+    if (distY <= b.getLength()/2) {
+        velocity.x *= -1; 
+        hit = true;
+    } 
+    float deltaX = distX - b.getWidth()/2;
+    float deltaY = distY - b.getLength()/2;
+    if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
+       velocity.x *= -1;
+       velocity.y *= -1;
+       hit = true;
+    }
+    if (hit) {
+        if (b.hardness > 1) {
              b.hardness--;
              return false;
-           }
-           b.breakBrick();
-           return true;
+        }
+        b.breakBrick();
+        return true;
     }
        
     return false;
