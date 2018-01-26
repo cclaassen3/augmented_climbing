@@ -17,7 +17,7 @@ void setup() {
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
-  numBricks = 12;
+  numBricks = 24;
   level     = 1;
   initialize();
 }
@@ -88,7 +88,11 @@ void initialize() {
   bricks = new Brick[numBricks];
   
   for (int i = 0; i < bricks.length; i++)
-    bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0));
+    if (i % 5 > 0) {
+       bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0));
+    } else {
+      bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,255,0));
+    }
 }
 
 //determine whether the ball has fallen under the platform
