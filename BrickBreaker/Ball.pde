@@ -37,13 +37,27 @@ class Ball {
  
   //determines if the ball has collided with the platform
   void detectCollision(Platform p) {
+    
     Vector pLoc = p.getLocation();
    
      //if ((this.location.y + radius <= ploc.y))
+    float middle  = (2 * pLoc.x + p.getWidth()) / 2;
     
     if ((this.location.x >= pLoc.x && this.location.x <= pLoc.x + p.getWidth()) &&
         (this.location.y + radius >= pLoc.y)) {
+           float offset = (this.location.x - middle) / 2;
            velocity.y *= -1;
+           if (offset > 0) {
+             velocity.x =  abs(velocity.x * offset / 4);
+           } else {
+             velocity.x =  -1 * abs(velocity.x * offset / 4);
+           }
+           float unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
+           velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
+           velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
+           print(offset, "\n");
+           print(velocity.x, velocity.y, "\n");
+           
     }
     
     
