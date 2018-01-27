@@ -104,16 +104,11 @@ void initialize() {
 
 //determine whether the ball has fallen under the platform
 boolean died() {
-  Vector bLoc = ball.getLocation();      //ball location
-  Vector pLoc1 = platform1.getLocation();  //platform 1 location
-  Vector pLoc2 = platform2.getLocation();  //platform 2 location
-  
-  if (bLoc.x < 0 || bLoc.x > width)
-    return (bLoc.y > pLoc1.y) || (bLoc.y > pLoc2.y);
-  else if (bLoc.y > height)
+  Vector bLoc = ball.getLocation();      //ball location  
+  if (bLoc.y + ball.radius > height) {
     return true;
-  else
-    return false;
+  }
+   return false;
 }
 
 //restart the game
