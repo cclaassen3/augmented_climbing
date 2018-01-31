@@ -58,7 +58,7 @@ class Ball {
            velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
            
            //print(offset, "\n");
-           //print(velocity.x, velocity.y, "\n");
+           
            //print("@@@@@@@@@@@@@@@@@@@@@\n");
            if (abs(velocity.y) < .5) {
              velocity.y *= 2;
@@ -66,6 +66,7 @@ class Ball {
              velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
              velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
            }
+           print(velocity.x, velocity.y, "\n");  
            
     }
     
