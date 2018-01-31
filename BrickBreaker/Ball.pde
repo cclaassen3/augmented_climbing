@@ -48,15 +48,24 @@ class Ball {
            float offset = (this.location.x - middle) / 2;
            velocity.y *= -1;
            if (offset > 0) {
-             velocity.x =  abs(velocity.x * offset / 4);
+             velocity.x =  sqrt(abs(velocity.x * offset));
            } else {
-             velocity.x =  -1 * abs(velocity.x * offset / 4);
+             velocity.x =  -1 * sqrt(abs(velocity.x * offset));
            }
+           
            float unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
            velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
            velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
-           print(offset, "\n");
-           print(velocity.x, velocity.y, "\n");
+           
+           //print(offset, "\n");
+           //print(velocity.x, velocity.y, "\n");
+           //print("@@@@@@@@@@@@@@@@@@@@@\n");
+           if (abs(velocity.y) < .5) {
+             velocity.y *= 2;
+             unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
+             velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
+             velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
+           }
            
     }
     
