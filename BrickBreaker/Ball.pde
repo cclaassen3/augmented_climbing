@@ -50,9 +50,9 @@ class Ball {
            print(offset, "\n");
            velocity.y = -1;
            if (offset > 0) {
-             velocity.x =  sq(abs(offset/2));
+             velocity.x =  sq(abs(offset/5));
            } else {
-             velocity.x =  -1 * sq(abs(offset/10));
+             velocity.x =  -1 * sq(abs(offset/5));
            }
            
            float unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
@@ -63,10 +63,10 @@ class Ball {
            
            //print("@@@@@@@@@@@@@@@@@@@@@\n");
            if (abs(velocity.y) < .4) {
-             velocity.y *= 2;
+             velocity.y = -.4;
              unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
-             velocity.y = 3 * velocity.y / unitvector;
-             velocity.x = 3 * velocity.x / unitvector;
+             velocity.y = 4 * velocity.y / unitvector;
+             velocity.x = 4 * velocity.x / unitvector;
            }
            print(velocity.x, velocity.y, "\n");  
            
