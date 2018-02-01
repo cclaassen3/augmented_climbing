@@ -127,7 +127,8 @@ class Ball {
     }
     if (hit) {
         if (b.hardness > 1) {
-             b.hardness--;
+             b.hardness = 1;
+             b.setColor(color(255,0,0));
              return false;
         }
         b.breakBrick();

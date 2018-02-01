@@ -18,7 +18,7 @@ void setup() {
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
-  numBricks = 24;
+  numBricks = 36;
   level     = 1;
   initialize();
 }

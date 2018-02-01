@@ -20,6 +20,10 @@ class Brick {
     fill(c);
     rect(location.x, location.y, bWidth, bLength);
   }
+  
+  void setColor(color c) {
+    fill(c); 
+  }
  
   //return the location
   Vector getLocation() {
