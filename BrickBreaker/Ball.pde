@@ -46,11 +46,13 @@ class Ball {
     if ((this.location.x >= pLoc.x && this.location.x <= pLoc.x + p.getWidth()) &&
         (this.location.y + radius >= pLoc.y)) {
            float offset = (this.location.x - middle) / 2;
-           velocity.y *= -1;
+           
+           print(offset, "\n");
+           velocity.y = -1;
            if (offset > 0) {
-             velocity.x =  sqrt(abs(velocity.x * offset));
+             velocity.x =  sq(abs(offset/2));
            } else {
-             velocity.x =  -1 * sqrt(abs(velocity.x * offset));
+             velocity.x =  -1 * sq(abs(offset/10));
            }
            
            float unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
@@ -60,11 +62,11 @@ class Ball {
            //print(offset, "\n");
            
            //print("@@@@@@@@@@@@@@@@@@@@@\n");
-           if (abs(velocity.y) < .5) {
+           if (abs(velocity.y) < .4) {
              velocity.y *= 2;
              unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
-             velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
-             velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
+             velocity.y = 3 * velocity.y / unitvector;
+             velocity.x = 3 * velocity.x / unitvector;
            }
            print(velocity.x, velocity.y, "\n");  
            
