@@ -19,7 +19,7 @@ class Platform {
   //draws the platform
   void display() {
     fill(c);
-    rect(location.x,location.y,pWidth,pLength);
+    rect(location.x,location.y,pWidth,pLength, 9);
   }
   
   //move the platform
@@ -34,9 +34,9 @@ class Platform {
       }
       if (n == 2) {
         if (key == 'd')
-            moveRight(); 
+          moveRight(); 
         if (key == 'a')
-            moveLeft();
+          moveLeft();
       }
     }
   }
