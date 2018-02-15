@@ -41,19 +41,19 @@ void setup() {
   mat_bg = opencv_bg.getColor();
   mat_bg_channels = new ArrayList<Mat>();
   Core.split(mat_bg, mat_bg_channels);
-    
-  //set up openCV for img captures
-  opencv_img = new OpenCV(this, x, y);
-  opencv_img.useColor();
 }
 
 void draw() {
+  
+  //set up openCV for img captures
+  opencv_img = new OpenCV(this, x, y);
+  opencv_img.useColor();
   
   //retrieve kinect image
   img = kinect.getVideoImage();
   opencv_img.loadImage(img);
   mat_img = opencv_img.getColor();
-  
+    
   //split into color channels
   mat_img_channels = new ArrayList<Mat>();
   Core.split(mat_img, mat_img_channels);
@@ -64,22 +64,22 @@ void draw() {
   }
   
   //merge color channels
-  Core.merge(mat_img_channels, mat_img);
+  //Core.merge(mat_img_channels, mat_img);
+  
+  //combine color channels
+  Core.add(mat_img_channels.get(0), mat_img_channels.get(1), mat_img);
+  Core.add(mat_img, mat_img_channels.get(2), mat_img);
+  opencv_img.setGray(mat_img);
   
   //threshold img
   opencv_img.blur(10);
-  opencv_img.threshold(35);
+  opencv_img.threshold(55);
   
   //dilate and erode
   for (int i=0; i<5; i++) {
     opencv_img.dilate();
     opencv_img.erode();
   }
-  
-  opencv_img.setColor(mat_img);
-  
-  //convert to grayscale img
-  //opencv_img.useGray();
   
   //display image
   image(opencv_img.getSnapshot(), 0, 0);
