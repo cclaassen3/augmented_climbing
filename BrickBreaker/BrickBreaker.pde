@@ -1,7 +1,10 @@
+import java.util.Arrays;
+
 Ball ball;
 Platform platform1;
 Platform platform2;
 Brick bricks[];
+LevelManager manager;
 
 PFont f;
 
@@ -11,15 +14,14 @@ boolean paused,
         paused_for_help;
         
 int     level,
-        numBricks,
         lives;
 
 void setup() {
-  size(600,400);
+  size(600, 400);
+  manager = new LevelManager(600, 400);
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
-  numBricks = 36;
   level     = 1;
   initialize();
 }
@@ -96,17 +98,11 @@ void initialize() {
   gameOver = false;
   lives    = 3;
   
-  if (levelComplete)
-    numBricks += 12;
+  if (levelComplete && level < 3)
+    level++;
   
-  bricks = new Brick[numBricks];
-  
-  for (int i = 0; i < bricks.length; i++)
-    if (i % 5 > 0) {
-       bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,0,0), 1);
-    } else {
-      bricks[i] = new Brick(new Vector(((i % 12) * width/12), ((i/12) * 20)), width/12, 20, color(255,255,0), 2);
-    }
+  bricks = manager.loadLevel(level);
+
 }
 
 //determine whether the ball has fallen under the platform
@@ -149,7 +145,6 @@ void gameOver() {
   fill(0);
   text("Game Over!", width/2 - 50, height/2);
   noLoop();
-  numBricks = 12;
 }
  
 //complete the level by stopping the draw() method and displaying level completeion text

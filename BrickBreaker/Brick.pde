@@ -18,11 +18,13 @@ class Brick {
  
   void display() {
     fill(c);
+    //noStroke();
     rect(location.x, location.y, bWidth, bLength);
   }
   
   void setColor(color c) {
     fill(c); 
+    //noStroke();
   }
  
   //return the location
