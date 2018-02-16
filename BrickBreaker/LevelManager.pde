@@ -15,7 +15,6 @@ class LevelManager {
   }
 
   Brick[] loadLevel(int level) {
-    level = 2;
     Brick[] bricks;
     String path = sketchPath("levels\\" + levelMapping[level - 1]);
     //Manual selection, redo with random number later
@@ -25,8 +24,7 @@ class LevelManager {
       System.out.println("Error: No level files found in levels\\" + levelMapping[level - 1]);
       return null;
     } else {
-      int rand = 0;
-      //int rand = int(random(fileNames.length));
+      int rand = int(random(fileNames.length));
       String[] levelInfo = loadStrings(path + "\\" + fileNames[rand]); 
       System.out.println(Arrays.toString(levelInfo));
       
