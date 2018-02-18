@@ -16,16 +16,17 @@ class LevelManager {
 
   Brick[] loadLevel(int level) {
     Brick[] bricks;
-    String path = sketchPath("levels\\" + levelMapping[level - 1]);
+    String path = sketchPath("levels/" + levelMapping[level - 1]);
     //Manual selection, redo with random number later
     String[] fileNames = listFileNames(path);
+    System.out.println(path);
     System.out.println(Arrays.toString(fileNames));
     if (fileNames.length == 0) {
       System.out.println("Error: No level files found in levels\\" + levelMapping[level - 1]);
       return null;
     } else {
       int rand = int(random(fileNames.length));
-      String[] levelInfo = loadStrings(path + "\\" + fileNames[rand]); 
+      String[] levelInfo = loadStrings(path + "/" + fileNames[rand]); 
       System.out.println(Arrays.toString(levelInfo));
       
       int columns = Integer.parseInt(levelInfo[0]);

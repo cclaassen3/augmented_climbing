@@ -11,25 +11,52 @@ PFont f;
 boolean paused,
         gameOver,
         levelComplete,
-        paused_for_help;
+        paused_for_help,
+        at_main_menu,
+        playgame_over, help_over;
         
 int     level,
-        lives;
+        lives,
+        playgame_X, playgame_Y,
+        help_X, help_Y,
+        button_width, button_height;
 
 void setup() {
   size(600, 400);
-  manager = new LevelManager(600, 400);
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
   level     = 1;
+  manager = new LevelManager(600, 400);
   initialize();
 }
 
 void draw() {
   background(255);
   int bricksBroken = 0;
-  if (!died()) {
+  if (at_main_menu) {
+    update(mouseX, mouseY);
+    
+    if (playgame_over) {
+      fill(240, 128, 128);
+    } else {
+      fill(200);
+    }
+    rect(playgame_X, playgame_Y, button_width, button_height);
+    
+    if (help_over) {
+      fill(240, 128, 128);
+    } else {
+      fill(200);
+    }
+    rect(help_X, help_Y, button_width, button_height);
+    
+    textAlign(CENTER, CENTER);
+    fill(50);
+    text("Play", playgame_X, playgame_Y, button_width, button_height);
+    text("Instructions", help_X, help_Y, button_width, button_height);
+    text("BRICK BREAKER", playgame_X - 50, playgame_Y - 150, button_width + 100, button_height);
+  } else if (!died()) {
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
       ball.detectCollision(bricks[i]);
@@ -59,6 +86,36 @@ void draw() {
   }  
 }
 
+void update(int x, int y) {
+  if ( overRect(playgame_X, playgame_Y, button_width, button_height) ) {
+    playgame_over = true;
+    help_over = false;
+  } else if ( overRect(help_X, help_Y, button_width, button_height) ) {
+    playgame_over = false;
+    help_over = true;
+  } else {
+    playgame_over = help_over = false;
+  }
+}
+
+void mousePressed() {
+  if (playgame_over) {
+    //LEAVE ACTIONS HERE
+    at_main_menu = false;
+  }
+  if (help_over) {
+    //ADD HELP SCREEN LOGIC HERE;
+  }
+}
+
+boolean overRect(int x, int y, int width, int height)  {
+  if (mouseX >= x && mouseX <= x+width && 
+      mouseY >= y && mouseY <= y+height) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 void keyPressed() {
   //restart the game or move on to the next level
@@ -96,11 +153,19 @@ void initialize() {
   paused   = false;
   paused_for_help = false;
   gameOver = false;
+  at_main_menu = true;
   lives    = 3;
+  
+  playgame_X = (width/2) - 60;
+  playgame_Y = (height/2) + 45;
+  help_X = playgame_X;
+  help_Y = playgame_Y + 45;
+  button_width = 120;
+  button_height = 30;
   
   if (levelComplete && level < 3)
     level++;
-  
+ 
   bricks = manager.loadLevel(level);
 
 }
