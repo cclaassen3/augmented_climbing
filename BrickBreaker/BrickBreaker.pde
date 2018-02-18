@@ -208,7 +208,7 @@ void continueGame() {
 void gameOver() {
   gameOver = true;
   fill(0);
-  text("Game Over!", width/2 - 50, height/2);
+  text("Game Over!", width/2 - 50, height/2, button_width, button_height);
   noLoop();
 }
  
