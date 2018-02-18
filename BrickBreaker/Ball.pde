@@ -37,28 +37,109 @@ class Ball {
  
   //determines if the ball has collided with the platform
   void detectCollision(Platform p) {
+    
     Vector pLoc = p.getLocation();
    
+
     if ((this.location.x + radius > pLoc.x && this.location.x + radius < pLoc.x + p.getWidth()) &&
         (this.location.y + radius > pLoc.y && this.location.y - radius < pLoc.y + p.getLength())) {
            velocity.y *= -1;
            this.location.y += 1;
+
+     //if ((this.location.y + radius <= ploc.y))
+    float middle  = (2 * pLoc.x + p.getWidth()) / 2;
+    
+    if ((this.location.x >= pLoc.x && this.location.x <= pLoc.x + p.getWidth()) &&
+        (this.location.y + radius >= pLoc.y)) {
+           float offset = (this.location.x - middle) / 2;
+           
+           print(offset, "\n");
+           velocity.y = -1;
+           if (offset > 0) {
+             velocity.x =  sq(abs(offset/4.5));
+           } else {
+             velocity.x =  -1 * sq(abs(offset/4.5));
+           }
+           
+           float unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
+           velocity.y = 2 * sqrt(2) * velocity.y / unitvector;
+           velocity.x = 2 * sqrt(2) * velocity.x / unitvector;
+           
+           //print(offset, "\n");
+           
+           //print("@@@@@@@@@@@@@@@@@@@@@\n");
+           if (abs(velocity.y) < .4) {
+             velocity.y = -.4;
+             unitvector = sqrt(sq(velocity.x) + sq(velocity.y));
+             velocity.y = 4 * velocity.y / unitvector;
+             velocity.x = 4 * velocity.x / unitvector;
+           }
+           print(velocity.x, velocity.y, "\n");  
+           
+        }
     }
+    
+    
+    //float distX = abs(this.location.x - pLoc.x - p.getWidth()/2);
+    //float distY = abs(this.location.y - pLoc.y - p.getLength()/2);
+    
+    //// no collision
+    //if ((distX > p.getWidth()/2 + radius) || (distY > p.getLength()/2 + radius)) {
+    //    return;
+    //}
+    
+    
+    //if (distX <= p.getWidth()/2) {
+    //    velocity.y *= -1; 
+    //}
+    //if (distY <= p.getLength()/2) {
+    //    velocity.x *= -1; 
+    //} 
+    //float deltaX = distX - p.getWidth()/2;
+    //float deltaY = distY - p.getLength()/2;
+    //if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
+    //   velocity.x *= -1;
+    //   velocity.y *= -1;
+    //}
   }
  
   //determine if the ball has collided with a brick
   boolean detectCollision(Brick b) {
     Vector bLoc = b.getLocation();
-   
-    if ((this.location.x + radius >= bLoc.x && this.location.x + radius <= bLoc.x + b.getWidth()) &&
-        (this.location.y + radius >= bLoc.y && this.location.y - radius <= bLoc.y + b.getLength())) {
-           velocity.y *= -1;
-           if (b.hardness > 1) {
-             b.hardness--;
+    
+    float distX = abs(this.location.x - bLoc.x - b.getWidth()/2);
+    float distY = abs(this.location.y - bLoc.y - b.getLength()/2);
+    
+    // no collision
+    if ((distX > b.getWidth()/2 + radius) || (distY > b.getLength()/2 + radius)) {
+        return false;
+    }
+    
+    boolean hit = false;
+    
+    if (distX <= b.getWidth()/2) {
+        velocity.y *= -1; 
+        hit = true;
+    }
+    if (distY <= b.getLength()/2) {
+        velocity.x *= -1; 
+        hit = true;
+    } 
+    float deltaX = distX - b.getWidth()/2;
+    float deltaY = distY - b.getLength()/2;
+    if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
+       velocity.x *= -1;
+       velocity.y *= -1;
+       hit = true;
+    }
+    if (hit) {
+        if (b.hardness > 1) {
+             b.hardness = 1;
+             b.setColor(color(255,0,0));
              return false;
-           }
-           b.breakBrick();
-           return true;
+        }
+        b.breakBrick();
+        return true;
     }
        
     return false;

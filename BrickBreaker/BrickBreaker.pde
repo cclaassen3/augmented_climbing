@@ -7,7 +7,8 @@ PFont f;
 
 boolean paused,
         gameOver,
-        levelComplete;
+        levelComplete,
+        paused_for_help;
         
 int     level,
         numBricks,
@@ -18,7 +19,7 @@ void setup() {
   frameRate(100);
   f = createFont("Arial", 16, true);
   textFont(f);
-  numBricks = 24;
+  numBricks = 36;
   level     = 1;
   initialize();
 }
@@ -35,14 +36,15 @@ void draw() {
     }
     if (bricksBroken == bricks.length)
       completeLevel();
-    ball.detectCollision(platform1); 
-    ball.detectCollision(platform2); 
-    ball.display();
-    ball.move();
     platform1.display();
     platform2.display();
     platform1.move();
     platform2.move();
+    ball.detectCollision(platform1); 
+    ball.detectCollision(platform2); 
+    ball.display();
+    ball.move();
+    
     drawLives();
   } else {
       if (--lives == 0) {
@@ -75,8 +77,13 @@ void keyPressed() {
   //exit the game
   if ((key == 'q' || key == 'Q') && paused) {
     exit(); 
- }
- 
+  }
+  if ((key == 'h' || key == 'H') && !paused_for_help) {
+    help(); 
+  }
+  if ((key == 'x' || key == 'X') && paused_for_help) {
+    continueGame();
+  }
 }
 
 //initialize all game objects
@@ -85,6 +92,7 @@ void initialize() {
   platform1 = new Platform(new Vector(width/2+30,350), new Vector(3,0), 60, 10, color(128,128,128), 1);
   platform2 = new Platform(new Vector(width/2-90,350), new Vector(3,0), 60, 10, color(128,128,128), 2);
   paused   = false;
+  paused_for_help = false;
   gameOver = false;
   lives    = 3;
   
@@ -103,16 +111,11 @@ void initialize() {
 
 //determine whether the ball has fallen under the platform
 boolean died() {
-  Vector bLoc = ball.getLocation();      //ball location
-  Vector pLoc1 = platform1.getLocation();  //platform 1 location
-  Vector pLoc2 = platform2.getLocation();  //platform 2 location
-  
-  if (bLoc.x < 0 || bLoc.x > width)
-    return (bLoc.y > pLoc1.y) || (bLoc.y > pLoc2.y);
-  else if (bLoc.y > height)
+  Vector bLoc = ball.getLocation();      //ball location  
+  if (bLoc.y + ball.radius > height) {
     return true;
-  else
-    return false;
+  }
+   return false;
 }
 
 //restart the game
@@ -127,9 +130,16 @@ void pauseGame() {
   text("Game Paused. Press [c] to continue.\nPress [q] to quit game.", width/2 - 100, height/2);
   noLoop();
 }
+
+void help() {
+  paused_for_help = true;
+  text("                        Instructions\nPlayer 1: Press [a] & [d] to move paddle.\nPlayer 2: Use arrow keys to move paddle.\nPress [p] to pause.\nPress [x] to return to game.", width/2 - 142, height/2 - 30);
+  noLoop();
+}
  
 //continue (unpause) the game
 void continueGame() {
+  paused_for_help = false;
   paused = false;
   loop();
 }
