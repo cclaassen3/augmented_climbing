@@ -1,5 +1,5 @@
 class Ball {
-  
+  Vector prevLocation;
   Vector location;
   Vector velocity;
   float radius;
@@ -20,6 +20,7 @@ class Ball {
  
   //moves the ball and detects if it hits the wall
   void move() {
+    prevLocation = location;
     location.add(velocity);
     if (location.x - radius <= 0 || location.x + radius >= width) {
       velocity.x *= -1;
@@ -49,8 +50,8 @@ class Ball {
      //if ((this.location.y + radius <= ploc.y))
     float middle  = (2 * pLoc.x + p.getWidth()) / 2;
     
-    if ((this.location.x >= pLoc.x && this.location.x <= pLoc.x + p.getWidth()) &&
-        (this.location.y + radius >= pLoc.y)) {
+    if ((this.location.x + radius >= pLoc.x && this.location.x - radius <= pLoc.x + p.getWidth()) &&
+        (this.location.y + radius >= pLoc.y && this.location.y - radius <= pLoc.y + p.getLength())) {
            float offset = (this.location.x - middle) / 2;
            
            print(offset, "\n");
@@ -79,28 +80,6 @@ class Ball {
         }
     }
     
-    
-    //float distX = abs(this.location.x - pLoc.x - p.getWidth()/2);
-    //float distY = abs(this.location.y - pLoc.y - p.getLength()/2);
-    
-    //// no collision
-    //if ((distX > p.getWidth()/2 + radius) || (distY > p.getLength()/2 + radius)) {
-    //    return;
-    //}
-    
-    
-    //if (distX <= p.getWidth()/2) {
-    //    velocity.y *= -1; 
-    //}
-    //if (distY <= p.getLength()/2) {
-    //    velocity.x *= -1; 
-    //} 
-    //float deltaX = distX - p.getWidth()/2;
-    //float deltaY = distY - p.getLength()/2;
-    //if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
-    //   velocity.x *= -1;
-    //   velocity.y *= -1;
-    //}
   }
  
   //determine if the ball has collided with a brick
@@ -133,13 +112,14 @@ class Ball {
        hit = true;
     }
     if (hit) {
-        if (b.hardness > 1) {
-             b.hardness = 1;
-             b.setColor(color(255,0,0));
-             return false;
-        }
-        b.breakBrick();
-        return true;
+      location = prevLocation;
+      if (b.hardness > 1) {
+           b.hardness = 1;
+           b.setColor(color(255,0,0));
+           return false;
+      }
+      b.breakBrick();
+      return true;
     }
        
     return false;
