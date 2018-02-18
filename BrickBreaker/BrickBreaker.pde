@@ -6,18 +6,19 @@ Platform platform2;
 Brick bricks[];
 LevelManager manager;
 
+
 PFont f;
 
 boolean paused,
         gameOver,
         levelComplete,
         paused_for_help,
-        at_main_menu,
-        at_instructions_page,
+        at_main_menu, at_instructions_page, at_countdown,
         playgame_over, help_over, help_back_over;
         
 int     level,
         lives,
+        play_press_time, interval,
         playgame_X, playgame_Y,
         help_X, help_Y,
         help_back_X, help_back_Y,
@@ -36,7 +37,17 @@ void setup() {
 void draw() {
   background(255);
   int bricksBroken = 0;
-  if (at_main_menu) {
+  if (at_countdown) {
+     int t = interval - int((millis() - play_press_time) / 1000);
+     String time = nf(t , 3);
+     
+     if (t == 0) {
+       at_countdown = false;
+       at_main_menu = false;
+     } else {
+       text(time, width/2, height/2);
+     }
+  } else if (at_main_menu) {
     update(mouseX, mouseY);
     if (playgame_over) {
       fill(240, 128, 128);
@@ -117,7 +128,8 @@ void update(int x, int y) {
 void mousePressed() {
   if (playgame_over) {
     //LEAVE ACTIONS HERE
-    at_main_menu = false;
+    at_countdown = true;
+    play_press_time = millis();
   }
   if (help_over) {
     //ADD HELP SCREEN LOGIC HERE;
@@ -177,6 +189,7 @@ void initialize() {
   gameOver = false;
   at_main_menu = true;
   at_instructions_page = false;
+  interval = 10;
   
   lives    = 3;
   
