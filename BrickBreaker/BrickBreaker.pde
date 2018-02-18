@@ -13,12 +13,14 @@ boolean paused,
         levelComplete,
         paused_for_help,
         at_main_menu,
-        playgame_over, help_over;
+        at_instructions_page,
+        playgame_over, help_over, help_back_over;
         
 int     level,
         lives,
         playgame_X, playgame_Y,
         help_X, help_Y,
+        help_back_X, help_back_Y,
         button_width, button_height;
 
 void setup() {
@@ -36,7 +38,6 @@ void draw() {
   int bricksBroken = 0;
   if (at_main_menu) {
     update(mouseX, mouseY);
-    
     if (playgame_over) {
       fill(240, 128, 128);
     } else {
@@ -56,6 +57,19 @@ void draw() {
     text("Play", playgame_X, playgame_Y, button_width, button_height);
     text("Instructions", help_X, help_Y, button_width, button_height);
     text("BRICK BREAKER", playgame_X - 50, playgame_Y - 150, button_width + 100, button_height);
+  } else if (at_instructions_page) {
+    update(mouseX, mouseY);
+    textAlign(LEFT, CENTER);
+    text("Instructions\n\nYour hands will be moving the paddle around.\nYou can use the paddles to bounce the balls off\nto destroy the bricks above one by one. The yellow\ncolor bricks will take 2 hits to get destroyed.\nYou win by destroying all the bricks in the game.", playgame_X - 100, height/2 - 50);
+    if (help_back_over) {
+      fill(240, 128, 128);
+    } else {
+      fill(200);
+    }
+    rect(help_back_X, help_back_Y, button_width, button_height);
+    textAlign(CENTER, CENTER);
+    fill(50);
+    text("Back", help_back_X, help_back_Y, button_width, button_height);
   } else if (!died()) {
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
@@ -93,8 +107,10 @@ void update(int x, int y) {
   } else if ( overRect(help_X, help_Y, button_width, button_height) ) {
     playgame_over = false;
     help_over = true;
+  } else if ( overRect(help_back_X, help_back_Y, button_width, button_height)) {
+    help_back_over = true;
   } else {
-    playgame_over = help_over = false;
+    playgame_over = help_over = help_back_over = false;
   }
 }
 
@@ -105,6 +121,12 @@ void mousePressed() {
   }
   if (help_over) {
     //ADD HELP SCREEN LOGIC HERE;
+    at_main_menu = false;
+    at_instructions_page = true;
+  }
+  if (help_back_over) {
+     at_instructions_page = false;
+     at_main_menu = true;
   }
 }
 
@@ -154,12 +176,16 @@ void initialize() {
   paused_for_help = false;
   gameOver = false;
   at_main_menu = true;
+  at_instructions_page = false;
+  
   lives    = 3;
   
   playgame_X = (width/2) - 60;
   playgame_Y = (height/2) + 45;
   help_X = playgame_X;
   help_Y = playgame_Y + 45;
+  help_back_X = help_X;
+  help_back_Y = help_Y + 45;
   button_width = 120;
   button_height = 30;
   
