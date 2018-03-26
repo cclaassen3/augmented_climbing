@@ -23,7 +23,7 @@ class Brick {
   }
   
   void setColor(color c) {
-    fill(c); 
+    this.c = c;
     //noStroke();
   }
  
