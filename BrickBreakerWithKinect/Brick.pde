@@ -16,12 +16,14 @@ class Brick {
     hardness = h;
   }
  
+  //draw brick
   void display() {
     fill(c);
     //noStroke();
     rect(location.x, location.y, bWidth, bLength);
   }
   
+  //set brick color
   void setColor(color c) {
     fill(c); 
     //noStroke();

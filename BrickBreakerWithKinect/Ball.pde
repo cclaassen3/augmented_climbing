@@ -12,13 +12,13 @@ class Ball {
     this.c   = c;
   }
  
-  //draws the ball
+  //draw the ball
   void display() {
     fill(c);
     ellipse(location.x,location.y,radius*2,radius*2);
   }
  
-  //moves the ball and detects if it hits the wall
+  //move the ball (inlc. detecting if it hits a wall)
   void move() {
     prevLocation = location;
     location.add(velocity);
@@ -31,10 +31,17 @@ class Ball {
     }
   }
  
-  //return the location
+  //return ball's location
   Vector getLocation() {
     return location; 
   }
+  
+  //take action if ball collided with human
+  void collisionDetected() {
+    this.velocity.y *= -1;
+    this.velocity.x *= -1;
+  }
+
   
   //determine if the ball has collided with a point
   boolean detectCollision(float px, float py) {
@@ -96,12 +103,12 @@ class Ball {
     return false;
   }
  
-  //return to the ball to it's starting position - on top of the platform
+  //return to the ball to its starting position
   void returnToOrigin() {
-    this.setLocation(new Vector(width/2,339));
+    this.setLocation(new Vector(0,50));
   }
  
-  //set the location
+  //set the ball's location
   void setLocation(Vector v) {
     this.location = v; 
   }

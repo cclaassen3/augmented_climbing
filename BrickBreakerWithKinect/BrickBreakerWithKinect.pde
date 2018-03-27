@@ -15,15 +15,19 @@ Ball ball;
 Brick bricks[];
 LevelManager manager;
 
-PFont f;
+//Screen size
+int w = 0;
+int h = 0;
 
+//Booleans
 boolean paused,
         gameOver,
         levelComplete,
         paused_for_help,
         at_main_menu, at_instructions_page, at_countdown,
         playgame_over, help_over, help_back_over;
-        
+  
+//Ints     
 int     level,
         lives,
         play_press_time, interval,
@@ -35,7 +39,7 @@ int     level,
 void setup() {
   size(displayWidth, displayHeight, P2D); 
 
-  //setup Kinect
+  //set up Kinect
   kinect = new SimpleOpenNI(this); 
   kinect.enableDepth();
   kinect.enableUser();
@@ -53,9 +57,8 @@ void setup() {
   img = loadImage("texture.jpg");
   
   //set up game
-  f = createFont("Arial", 16, true);
-  textFont(f);
-  level     = 1;
+  textFont(createFont("Arial", 16, true));
+  level = 1;
   manager = new LevelManager(600, 400);
   initialize();
   frameRate(100);
@@ -69,19 +72,19 @@ void draw() {
   kpc.setKinectUserImage(kinect.userImage());
   opencv.loadImage(kpc.getImage());
   
-  //get projected contours
+  //get projected contours & check for collision with ball
   projectedContours = new ArrayList<ProjectedContour>();
   ArrayList<Contour> contours = opencv.findContours();
   for (Contour contour : contours) {
     if (contour.area() > 2000) {
+//      if (contour.containsPoint((int) ball.location.x, (int) ball.location.y) == true) {
+//        println("collision detected!");
+//      }
       ArrayList<PVector> cvContour = contour.getPoints();
       ProjectedContour projectedContour = kpc.getProjectedContour(cvContour, 1.0);
       projectedContours.add(projectedContour);
     }
   }
-  
-  //check for collision detection
-  boolean collision = false;
     
   //draw projected contours
   background(0);
@@ -93,7 +96,7 @@ void draw() {
       PVector t = projectedContour.getTextureCoordinate(p);
       vertex(p.x, p.y, img.width * t.x, img.height * t.y);
       if (ball.detectCollision(p.x, p.y) == true) {
-        println("collision!");
+        println("collision detected!");
       }
     }
     endShape();
@@ -111,7 +114,9 @@ void draw() {
      } else {
        text(time, width/2, height/2);
      }
-  } else if (at_main_menu) {
+  } 
+  
+  else if (at_main_menu) {
     update(mouseX, mouseY);
     if (playgame_over) {
       fill(240, 128, 128);
@@ -132,7 +137,9 @@ void draw() {
     text("Play", playgame_X, playgame_Y, button_width, button_height);
     text("Instructions", help_X, help_Y, button_width, button_height);
     text("BRICK BREAKER", playgame_X - 50, playgame_Y - 150, button_width + 100, button_height);
-  } else if (at_instructions_page) {
+  } 
+  
+  else if (at_instructions_page) {
     update(mouseX, mouseY);
     textAlign(LEFT, CENTER);
     text("Instructions\n\nYour hands will be moving the paddle around.\nYou can use the paddles to bounce the balls off\nto destroy the bricks above one by one. The yellow\ncolor bricks will take 2 hits to get destroyed.\nYou win by destroying all the bricks in the game.", playgame_X - 100, height/2 - 50);
@@ -145,10 +152,12 @@ void draw() {
     textAlign(CENTER, CENTER);
     fill(50);
     text("Back", help_back_X, help_back_Y, button_width, button_height);
-  } else if (!died()) {
+  } 
+  
+  else if (!died()) {
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
-      ball.detectCollision(bricks[i]);
+//      ball.detectCollision(bricks[i]);
       if (bricks[i].broken)
         bricksBroken++;
     }
@@ -158,7 +167,9 @@ void draw() {
     ball.move();
     
     drawLives();
-  } else {
+  } 
+  
+  else {
       if (--lives == 0) {
         gameOver();
       } else {
@@ -237,15 +248,16 @@ void keyPressed() {
 
 //initialize all game objects
 void initialize() {
-  ball     = new Ball(new Vector(width/2,339), new Vector(2,-2), 10, color(0,0,255));
-  paused   = false;
+//  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
+  ball = new Ball(new Vector(width/2,339), new Vector(10,-10), 10, color(0,0,255));
+  paused = false;
   paused_for_help = false;
   gameOver = false;
   at_main_menu = true;
   at_instructions_page = false;
   interval = 1;
   
-  lives    = 3;
+  lives = 3;
   
   playgame_X = (width/2) - 60;
   playgame_Y = (height/2) + 45;
@@ -260,7 +272,6 @@ void initialize() {
     level++;
  
   bricks = manager.loadLevel(level);
-
 }
 
 //determine whether the ball has reached the bottom of the screen
@@ -320,18 +331,3 @@ void drawLives() {
     ellipse(width-20,(i*20) + rad, rad, rad);   
   } 
 }
-
-////find whether a point lies within a circle
-//boolean pointIsInsideBall(float px, float py) {
-//  
-//  //get distance between the point and circle's center
-//  float distX = ball.location.x - px;
-//  float distY = ball.location.y - py;
-//  float distance = sqrt( (distX*distX) + (distY*distY) );
-//
-//  //check if point's distance from the ball's center <= radius
-//  if (distance <= ball.radius) {
-//    return true;
-//  }
-//  return false;
-//}
