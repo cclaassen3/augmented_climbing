@@ -90,11 +90,9 @@ class Ball {
        hit = true;
     }
     if (hit) {
-      LevelManager l = new LevelManager(0,0);
+     LevelManager l = new LevelManager(0,0);
      location = prevLocation;
      if (b.hardness > 1) {
-        b.hardness = 1;
-        b.setColor(color(255,0,0));
         b.hardness--;
         b.setColor(l.getColorFromMapping(b.hardness));
         return false;
@@ -108,7 +106,7 @@ class Ball {
  
   //return to the ball to its starting position
   void returnToOrigin() {
-    this.setLocation(new Vector(20,50));
+    this.setLocation(new Vector(20,100));
   }
  
   //set the ball's location

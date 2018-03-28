@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.awt.Rectangle;
 import gab.opencv.*;
 import SimpleOpenNI.*;
 import KinectProjectorToolkit.*;
@@ -38,7 +39,7 @@ int     level,
 
 void setup() {
   size(displayWidth, displayHeight, P2D); 
-
+ 
   //set up Kinect
   kinect = new SimpleOpenNI(this); 
   kinect.enableDepth();
@@ -59,7 +60,7 @@ void setup() {
   //set up game
   textFont(createFont("Arial", 16, true));
   level = 1;
-  manager = new LevelManager(600, 400);
+  manager = new LevelManager(displayWidth, displayHeight);
   initialize();
   frameRate(100);
 }
@@ -77,9 +78,13 @@ void draw() {
   ArrayList<Contour> contours = opencv.findContours();
   for (Contour contour : contours) {
     if (contour.area() > 2000) {
-//      if (contour.containsPoint((int) ball.location.x, (int) ball.location.y) == true) {
-//        println("collision detected!");
-//      }
+      if (ballIsWithinContour(contour) == true) {
+        println("collision :)");
+        ball.collisionDetected();
+      }
+      if (contour.containsPoint((int) ball.location.x, (int) ball.location.y) == true) {
+        println("collision detected!");
+      }
       ArrayList<PVector> cvContour = contour.getPoints();
       ProjectedContour projectedContour = kpc.getProjectedContour(cvContour, 1.0);
       projectedContours.add(projectedContour);
@@ -95,9 +100,9 @@ void draw() {
     for (PVector p : projectedContour.getProjectedContours()) {
       PVector t = projectedContour.getTextureCoordinate(p);
       vertex(p.x, p.y, img.width * t.x, img.height * t.y);
-      if (ball.detectCollision(p.x, p.y) == true) {
-        println("collision detected!");
-      }
+//      if (ball.detectCollision(p.x, p.y) == true) {
+//        println("collision detected!");
+//      }
     }
     endShape();
   }
@@ -249,7 +254,7 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
 //  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
-  ball = new Ball(new Vector(width/2,339), new Vector(10,-10), 10, color(0,255,255));
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 10, color(0,255,255));
   paused = false;
   paused_for_help = false;
   gameOver = false;
@@ -330,4 +335,35 @@ void drawLives() {
     fill(0);
     ellipse(width-20,(i*20) + rad, rad, rad);   
   } 
+}
+
+
+//  //get projected contours & check for collision with ball
+//  projectedContours = new ArrayList<ProjectedContour>();
+//  ArrayList<Contour> contours = opencv.findContours();
+//  for (Contour contour : contours) {
+//    if (contour.area() > 2000) {
+////      if (contour.containsPoint((int) ball.location.x, (int) ball.location.y) == true) {
+////        println("collision detected!");
+////      }
+//      ArrayList<PVector> cvContour = contour.getPoints();
+//      ProjectedContour projectedContour = kpc.getProjectedContour(cvContour, 1.0);
+//      projectedContours.add(projectedContour);
+//    }
+//  }
+//  
+  
+//check if ball is within contour
+boolean ballIsWithinContour(Contour contour) {
+    Rectangle rectangle = contour.getBoundingBox();
+    int x = rectangle.x;
+    int y = rectangle.y;
+    int w = rectangle.width;
+    int h = rectangle.height;
+    if (ball.location.x >= rectangle.x && ball.location.x <= rectangle.x + rectangle.width) {
+      if (ball.location.y >= rectangle.y && ball.location.y <= rectangle.y + rectangle.height) {
+        return true;
+      }
+    }
+    return false;
 }
