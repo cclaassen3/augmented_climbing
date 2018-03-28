@@ -115,9 +115,8 @@ class Ball {
       LevelManager l = new LevelManager(0,0);
       location = prevLocation;
       if (b.hardness > 1) {
-           b.hardness = 1;
-           b.setColor(color(255,0,0));
            b.hardness--;
+           b.setColor(l.getColorFromMapping(b.hardness));
            return false;
       }
       
