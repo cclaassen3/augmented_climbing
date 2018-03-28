@@ -122,6 +122,7 @@ void draw() {
   } 
   
   else if (at_main_menu) {
+    gameOver = false;
     update(mouseX, mouseY);
     if (playgame_over) {
       fill(240, 128, 128);
@@ -314,10 +315,11 @@ void continueGame() {
 }
 
 void gameOver() {
-  gameOver = true;
-  fill(0);
-  text("Game Over!", width/2 - 50, height/2, button_width, button_height);
-  noLoop();
+//  gameOver = true;
+//  fill(0);
+//  text("Game Over!", width/2 - 50, height/2, button_width, button_height);
+//  noLoop();
+  at_main_menu = true;
 }
  
 //complete the level by stopping the draw() method and displaying level completeion text
