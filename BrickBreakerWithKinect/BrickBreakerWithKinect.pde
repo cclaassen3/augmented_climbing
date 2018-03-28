@@ -35,7 +35,8 @@ int     level,
         playgame_X, playgame_Y,
         help_X, help_Y,
         help_back_X, help_back_Y,
-        button_width, button_height;
+        button_width, button_height,
+        collision_wait;
 
 void setup() {
   size(displayWidth, displayHeight, P2D); 
@@ -63,6 +64,9 @@ void setup() {
   manager = new LevelManager(displayWidth, displayHeight);
   initialize();
   frameRate(100);
+  
+  //set up collision detection variable
+  collision_wait = 0;
 }
 
 void draw() {
@@ -72,39 +76,39 @@ void draw() {
   kpc.setDepthMapRealWorld(kinect.depthMapRealWorld()); 
   kpc.setKinectUserImage(kinect.userImage());
   opencv.loadImage(kpc.getImage());
-  
+    
   //get projected contours & check for collision with ball
   projectedContours = new ArrayList<ProjectedContour>();
   ArrayList<Contour> contours = opencv.findContours();
   for (Contour contour : contours) {
-    if (contour.area() > 2000) {
-      if (ballIsWithinContour(contour) == true) {
-        println("collision :)");
-        ball.collisionDetected();
-      }
-      if (contour.containsPoint((int) ball.location.x, (int) ball.location.y) == true) {
-        println("collision detected!");
-      }
+    if (contour.area() > 1000) {
       ArrayList<PVector> cvContour = contour.getPoints();
       ProjectedContour projectedContour = kpc.getProjectedContour(cvContour, 1.0);
       projectedContours.add(projectedContour);
     }
+  }
+  
+  //decrement collision wait
+  if (collision_wait > 0) {
+    collision_wait--;
   }
     
   //draw projected contours
   background(0);
   for (int i=0; i<projectedContours.size(); i++) {
     ProjectedContour projectedContour = projectedContours.get(i);
-    beginShape();
-    texture(img);
+    PShape body = createShape();
+    body.beginShape();
+    body.texture(img);
     for (PVector p : projectedContour.getProjectedContours()) {
       PVector t = projectedContour.getTextureCoordinate(p);
-      vertex(p.x, p.y, img.width * t.x, img.height * t.y);
-//      if (ball.detectCollision(p.x, p.y) == true) {
-//        println("collision detected!");
-//      }
-    }
-    endShape();
+      body.vertex(p.x, p.y, img.width * t.x, img.height * t.y);
+        if (collision_wait==0 && ball.detectCollision(p.x, p.y) == true) {
+          collision_wait = 20;
+        }
+      }
+    body.endShape();
+    shape(body);
   }
   
   //draw game data
@@ -255,7 +259,7 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
 //  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
-  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 10, color(0,255,255));
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255));
   paused = false;
   paused_for_help = false;
   gameOver = false;
@@ -330,7 +334,7 @@ void completeLevel() {
 void drawLives() {
   int rad = 10;
   for (int i = 0; i < lives; i++) {
-    fill(0);
+    fill(255);
     ellipse(width-20,(i*20) + rad, rad, rad);   
   } 
 }
@@ -356,8 +360,10 @@ boolean ballIsWithinContour(Contour contour) {
     Rectangle rectangle = contour.getBoundingBox();
     int x = (int) rectangle.getX();
     int y = (int) rectangle.getY();
-    int w = rectangle.width;
-    int h = rectangle.height;
+    int w = (int) rectangle.getWidth();
+    int h = (int) rectangle.getHeight();
+    rect(x,y,w,h);
+    
     if (ball.location.x >= rectangle.x && ball.location.x <= rectangle.x + rectangle.width) {
       if (ball.location.y >= rectangle.y && ball.location.y <= rectangle.y + rectangle.height) {
         return true;
