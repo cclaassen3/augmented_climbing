@@ -45,10 +45,10 @@ void setup() {
   kinect.enableUser();
   kinect.alternativeViewPointDepthToImage();
   
-  //setup OpenCV
+  //set up OpenCV
   opencv = new OpenCV(this, kinect.depthWidth(), kinect.depthHeight());
 
-  //setup Kinect Projector Toolkit
+  //set up Kinect Projector Toolkit
   kpc = new KinectProjectorToolkit(this, kinect.depthWidth(), kinect.depthHeight());
   kpc.loadCalibration("calibration.txt");
   kpc.setContourSmoothness(4);
@@ -157,7 +157,7 @@ void draw() {
   else if (!died()) {
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
-//      ball.detectCollision(bricks[i]);
+      ball.detectCollision(bricks[i]);
       if (bricks[i].broken)
         bricksBroken++;
     }
@@ -249,7 +249,7 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
 //  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
-  ball = new Ball(new Vector(width/2,339), new Vector(10,-10), 10, color(0,0,255));
+  ball = new Ball(new Vector(width/2,339), new Vector(10,-10), 10, color(0,255,255));
   paused = false;
   paused_for_help = false;
   gameOver = false;

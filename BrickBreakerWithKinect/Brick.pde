@@ -25,8 +25,7 @@ class Brick {
   
   //set brick color
   void setColor(color c) {
-    fill(c); 
-    //noStroke();
+    this.c = c;
   }
  
   //return the location

@@ -13,6 +13,10 @@ class LevelManager {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
   }
+  
+    color getColorFromMapping(int choice) {
+    return this.colorMapping[choice-1];
+  }
 
   Brick[] loadLevel(int level) {
     Brick[] bricks;
