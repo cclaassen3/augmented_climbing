@@ -315,11 +315,7 @@ void continueGame() {
 }
 
 void gameOver() {
-//  gameOver = true;
-//  fill(0);
-//  text("Game Over!", width/2 - 50, height/2, button_width, button_height);
-//  noLoop();
-  at_main_menu = true;
+  initialize();
 }
  
 //complete the level by stopping the draw() method and displaying level completeion text
@@ -358,8 +354,8 @@ void drawLives() {
 //check if ball is within contour
 boolean ballIsWithinContour(Contour contour) {
     Rectangle rectangle = contour.getBoundingBox();
-    int x = rectangle.x;
-    int y = rectangle.y;
+    int x = (int) rectangle.getX();
+    int y = (int) rectangle.getY();
     int w = rectangle.width;
     int h = rectangle.height;
     if (ball.location.x >= rectangle.x && ball.location.x <= rectangle.x + rectangle.width) {
