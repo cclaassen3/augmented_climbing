@@ -4,7 +4,7 @@ class Ball {
   Vector velocity;
   float radius;
   color c;
- 
+   
   public Ball(Vector l, Vector v, float r, color c) {
     location = l;
     velocity = v;
@@ -38,8 +38,7 @@ class Ball {
   
   //take action if ball collided with human
   void collisionDetected() {
-    this.velocity.y *= -1;
-    this.velocity.x *= -1;
+    bounceBallRandomly();
   }
 
   
@@ -53,11 +52,23 @@ class Ball {
   
     //check if point's distance from the ball's center <= radius
     if (distance <= ball.radius) {
-       this.velocity.y *= -1;
-       this.velocity.x *= -1;
+       bounceBallRandomly();
        return true;
     }
     return false;
+  }
+  
+  void bounceBallRandomly() {
+    if (random(-1,1) < 0) {
+      this.velocity.x = -1 * random(7, 16);
+    } else {
+      this.velocity.x = random(7, 16);
+    }
+    if (this.velocity.y >= 0) {
+      this.velocity.y = -1 * random(7, 16);
+    } else {
+      this.velocity.y = random(7, 16);
+    }
   }
  
   //determine if the ball has collided with a brick
@@ -90,12 +101,14 @@ class Ball {
        hit = true;
     }
     if (hit) {
-      location = prevLocation;
-      if (b.hardness > 1) {
-           b.hardness = 1;
-           b.setColor(color(255,0,0));
-           return false;
-      }
+     LevelManager l = new LevelManager(0,0);
+     location = prevLocation;
+     println(b.hardness);
+     if (b.hardness > 1) {
+        b.hardness--;
+        b.setColor(l.getColorFromMapping(b.hardness));
+        return true;
+     }
       b.breakBrick();
       return true;
     }
@@ -105,7 +118,8 @@ class Ball {
  
   //return to the ball to its starting position
   void returnToOrigin() {
-    this.setLocation(new Vector(0,50));
+    this.setLocation(new Vector(20,100));
+    this.velocity = new Vector(8, 10);
   }
  
   //set the ball's location

@@ -48,6 +48,7 @@ void draw() {
        text(time, width/2, height/2);
      }
   } else if (at_main_menu) {
+    gameOver = false;
     update(mouseX, mouseY);
     if (playgame_over) {
       fill(240, 128, 128);
@@ -98,7 +99,6 @@ void draw() {
     ball.detectCollision(platform2); 
     ball.display();
     ball.move();
-    
     drawLives();
   } else {
       if (--lives == 0) {
@@ -246,9 +246,10 @@ void continueGame() {
 
 void gameOver() {
   gameOver = true;
-  fill(0);
-  text("Game Over!", width/2 - 50, height/2, button_width, button_height);
-  noLoop();
+  at_main_menu = true;
+  //fill(0);
+  //text("Game Over!", width/2 - 50, height/2, button_width, button_height);
+  //noLoop();
 }
  
 //complete the level by stopping the draw() method and displaying level completeion text
