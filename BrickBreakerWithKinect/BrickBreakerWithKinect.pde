@@ -272,11 +272,11 @@ void initialize() {
   playgame_X = (width/2) - 60;
   playgame_Y = (height/2) + 45;
   help_X = playgame_X;
-  help_Y = playgame_Y + 45;
+  help_Y = playgame_Y + 70;
   help_back_X = help_X;
   help_back_Y = help_Y + 45;
-  button_width = 120;
-  button_height = 30;
+  button_width = 150;
+  button_height = 60;
   
   if (levelComplete && level < 3)
     level++;
@@ -332,7 +332,7 @@ void completeLevel() {
 
 //draws balls on the side of the screen to represent the number of lives remaining
 void drawLives() {
-  int rad = 10;
+  int rad = 15;
   for (int i = 0; i < lives; i++) {
     fill(255);
     ellipse(width-20,(i*20) + rad, rad, rad);   
