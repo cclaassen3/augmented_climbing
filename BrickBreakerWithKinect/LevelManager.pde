@@ -32,10 +32,10 @@ class LevelManager {
       int columns = Integer.parseInt(levelInfo[0]);
       int colWidth = screenWidth / columns;
       System.out.println("Column Width " + colWidth);
-      bricks = new Brick[Integer.parseInt(levelInfo[1])];
+      bricks = new Brick[Integer.parseInt(levelInfo[2])];
       int brickCounter = 0;
-      int rowHeight = 20;
-      int sizeMetadata = 2; // how many rows of metadata to generate level
+      int rowHeight = screenHeight / Integer.parseInt(levelInfo[1]);
+      int sizeMetadata = 3; // how many rows of metadata to generate level
       System.out.println();
       
       for (int i = 0; i < levelInfo.length - sizeMetadata; i++) {
