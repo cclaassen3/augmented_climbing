@@ -265,7 +265,7 @@ void initialize() {
   gameOver = false;
   at_main_menu = true;
   at_instructions_page = false;
-  interval = 1;
+  interval = 5;
   
   lives = 3;
   
