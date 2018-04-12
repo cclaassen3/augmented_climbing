@@ -307,7 +307,7 @@ void pauseGame() {
 
 void help() {
   paused_for_help = true;
-  text("                        Instructions\nPlayer 1: Press [a] & [d] to move paddle.\nPlayer 2: Use arrow keys to move paddle.\nPress [p] to pause.\nPress [x] to return to game.", width/2 - 142, height/2 - 30);
+  text("                        Instructions\nThis is the classic brick breaker game with a twist.\nInstead of keyboard controlled paddles,\nyou can use your hands to hit the ball anywhere!\nSome bricks will need more than 1 hit to be destroyed.\nWhat are you waiting for, go and have some fun!", width/2 - 145, height/2 - 45);
   noLoop();
 }
  
