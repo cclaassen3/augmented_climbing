@@ -4,12 +4,13 @@ class Ball {
   Vector velocity;
   float radius;
   color c;
-   
-  public Ball(Vector l, Vector v, float r, color c) {
+  float speedup;
+  public Ball(Vector l, Vector v, float r, color c, float s) {
     location = l;
     velocity = v;
     radius   = r;
     this.c   = c;
+    speedup = s;
   }
  
   //draw the ball
@@ -23,12 +24,14 @@ class Ball {
     prevLocation = location;
     location.add(velocity);
     if (location.x - radius <= 0 || location.x + radius >= width) {
-      velocity.x *= -1;
+      velocity.x *= -1 * speedup;
     }
    
     if (location.y - radius <= 0) {
-      velocity.y *= -1;
+      velocity.y *= -1 * speedup;
     }
+    // adjust to change how fast ball speeds up
+    speedup += .001
   }
  
   //return ball's location
@@ -60,14 +63,14 @@ class Ball {
   
   void bounceBallRandomly() {
     if (random(-1,1) < 0) {
-      this.velocity.x = -1 * random(7, 16);
+      this.velocity.x = -1 * random(7, 16) * speedup;
     } else {
-      this.velocity.x = random(7, 16);
+      this.velocity.x = random(7, 16) * speedup;
     }
     if (this.velocity.y >= 0) {
-      this.velocity.y = -1 * random(7, 16);
+      this.velocity.y = -1 * random(7, 16) * speedup;
     } else {
-      this.velocity.y = random(7, 16);
+      this.velocity.y = random(7, 16) * speedup;
     }
   }
  
@@ -86,18 +89,18 @@ class Ball {
     boolean hit = false;
     
     if (distX <= b.getWidth()/2) {
-        velocity.y *= -1; 
+        velocity.y *= -1 * speedup; 
         hit = true;
     }
     if (distY <= b.getLength()/2) {
-        velocity.x *= -1; 
+        velocity.x *= -1 * speedup; 
         hit = true;
     } 
     float deltaX = distX - b.getWidth()/2;
     float deltaY = distY - b.getLength()/2;
     if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
-       velocity.x *= -1;
-       velocity.y *= -1;
+       velocity.x *= -1 * speedup;
+       velocity.y *= -1 * speedup;
        hit = true;
     }
     if (hit) {

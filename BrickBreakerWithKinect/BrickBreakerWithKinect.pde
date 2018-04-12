@@ -92,7 +92,8 @@ void draw() {
   if (collision_wait > 0) {
     collision_wait--;
   }
-    
+  
+  
   //draw projected contours
   background(0);
   for (int i=0; i<projectedContours.size(); i++) {
@@ -259,14 +260,13 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
 //  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
-  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255));
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255), 1);
   paused = false;
   paused_for_help = false;
   gameOver = false;
   at_main_menu = true;
   at_instructions_page = false;
   interval = 5;
-  
   lives = 3;
   
   playgame_X = (width/2) - 60;
