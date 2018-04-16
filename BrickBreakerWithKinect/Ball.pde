@@ -75,7 +75,7 @@ class Ball {
   }
  
   //determine if the ball has collided with a brick
-  boolean detectCollision(Brick b) {
+  int detectCollision(Brick b) {
     Vector bLoc = b.getLocation();
     
     float distX = abs(this.location.x - bLoc.x - b.getWidth()/2);
@@ -83,7 +83,7 @@ class Ball {
     
     // no collision
     if ((distX > b.getWidth()/2 + radius) || (distY > b.getLength()/2 + radius)) {
-        return false;
+        return 0;
     }
     
     boolean hit = false;
@@ -110,13 +110,13 @@ class Ball {
      if (b.hardness > 1) {
         b.hardness--;
         b.setColor(l.getColorFromMapping(b.hardness));
-        return true;
+        return 10;
      }
       b.breakBrick();
-      return true;
+      return 10;
     }
        
-    return false;
+    return 0;
   }
  
   //return to the ball to its starting position

@@ -37,7 +37,7 @@ int     level,
         help_back_X, help_back_Y,
         button_width, button_height,
         collision_wait;
-
+int     total_points, cur_score;
 void setup() {
   size(displayWidth, displayHeight, P2D); 
  
@@ -168,7 +168,8 @@ void draw() {
   else if (!died()) {
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
-      ball.detectCollision(bricks[i]);
+      int add_points = ball.detectCollision(bricks[i]);
+      cur_score += add_points;
       if (bricks[i].broken)
         bricksBroken++;
     }
@@ -268,7 +269,8 @@ void initialize() {
   at_instructions_page = false;
   interval = 5;
   lives = 3;
-  
+  total_points = 0;
+  cur_score = 0;
   playgame_X = (width/2) - 60;
   playgame_Y = (height/2) + 45;
   help_X = playgame_X;
@@ -282,6 +284,9 @@ void initialize() {
     level++;
  
   bricks = manager.loadLevel(level);
+  for (int i = 0; i < bricks.length; i++) {
+    total_points += bricks[i].hardness * 10; 
+  }
 }
 
 //determine whether the ball has reached the bottom of the screen
