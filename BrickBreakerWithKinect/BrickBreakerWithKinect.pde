@@ -192,6 +192,8 @@ void draw() {
   
   else {
       if (--lives == 0) {
+        text("You lose!\nScore: " + str(total_points), playgame_X - 50, height/2 - 50);
+        delay(100);
         gameOver();
       } else {
         ball.returnToOrigin();
