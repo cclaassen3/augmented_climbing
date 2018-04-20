@@ -59,6 +59,8 @@ void setup() {
   img = loadImage("texture.jpg");
   
   //set up game
+  
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255));
   textFont(createFont("Arial", 16, true));
   level = 1;
   manager = new LevelManager(displayWidth, displayHeight);
@@ -165,16 +167,19 @@ void draw() {
   } 
   
   else if (!died()) {
+    ball.display();
+    ball.move();
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
-      ball.detectCollision(bricks[i]);
+      if (ball != null) {
+        //println(ball);
+        ball.detectCollision(bricks[i]);
+      }
       if (bricks[i].broken)
         bricksBroken++;
     }
     if (bricksBroken == bricks.length)
       completeLevel();
-    ball.display();
-    ball.move();
     
     drawLives();
   } 
