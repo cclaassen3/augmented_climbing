@@ -4,12 +4,13 @@ class Ball {
   Vector velocity;
   float radius;
   color c;
-   
-  public Ball(Vector l, Vector v, float r, color c) {
+  float speedup;
+  public Ball(Vector l, Vector v, float r, color c, float s) {
     location = l;
     velocity = v;
     radius   = r;
     this.c   = c;
+    speedup = s;
   }
  
   //draw the ball
@@ -23,12 +24,14 @@ class Ball {
     prevLocation = location;
     location.add(velocity);
     if (location.x - radius <= 0 || location.x + radius >= width) {
-      velocity.x *= -1;
+      velocity.x *= -1 * speedup;
     }
    
     if (location.y - radius <= 0) {
-      velocity.y *= -1;
+      velocity.y *= -1 * speedup;
     }
+    // adjust to change how fast ball speeds up
+    speedup += .001
   }
  
   //return ball's location
@@ -60,19 +63,19 @@ class Ball {
   
   void bounceBallRandomly() {
     if (random(-1,1) < 0) {
-      this.velocity.x = -1 * random(7, 16);
+      this.velocity.x = -1 * random(7, 16) * speedup;
     } else {
-      this.velocity.x = random(7, 16);
+      this.velocity.x = random(7, 16) * speedup;
     }
     if (this.velocity.y >= 0) {
-      this.velocity.y = -1 * random(7, 16);
+      this.velocity.y = -1 * random(7, 16) * speedup;
     } else {
-      this.velocity.y = random(7, 16);
+      this.velocity.y = random(7, 16) * speedup;
     }
   }
  
   //determine if the ball has collided with a brick
-  boolean detectCollision(Brick b) {
+  int detectCollision(Brick b) {
     Vector bLoc = b.getLocation();
     
     float distX = abs(this.location.x - bLoc.x - b.getWidth()/2);
@@ -80,24 +83,24 @@ class Ball {
     
     // no collision
     if ((distX > b.getWidth()/2 + radius) || (distY > b.getLength()/2 + radius)) {
-        return false;
+        return 0;
     }
     
     boolean hit = false;
     
     if (distX <= b.getWidth()/2) {
-        velocity.y *= -1; 
+        velocity.y *= -1 * speedup; 
         hit = true;
     }
     if (distY <= b.getLength()/2) {
-        velocity.x *= -1; 
+        velocity.x *= -1 * speedup; 
         hit = true;
     } 
     float deltaX = distX - b.getWidth()/2;
     float deltaY = distY - b.getLength()/2;
     if ((deltaX*deltaX + deltaY*deltaY) <= (radius * radius)) {
-       velocity.x *= -1;
-       velocity.y *= -1;
+       velocity.x *= -1 * speedup;
+       velocity.y *= -1 * speedup;
        hit = true;
     }
     if (hit) {
@@ -107,13 +110,13 @@ class Ball {
      if (b.hardness > 1) {
         b.hardness--;
         b.setColor(l.getColorFromMapping(b.hardness));
-        return true;
+        return 10;
      }
       b.breakBrick();
-      return true;
+      return 10;
     }
        
-    return false;
+    return 0;
   }
  
   //return to the ball to its starting position

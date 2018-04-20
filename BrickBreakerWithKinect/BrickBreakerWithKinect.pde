@@ -37,7 +37,7 @@ int     level,
         help_back_X, help_back_Y,
         button_width, button_height,
         collision_wait;
-
+int     total_points, cur_score;
 void setup() {
   size(displayWidth, displayHeight, P2D); 
  
@@ -94,7 +94,8 @@ void draw() {
   if (collision_wait > 0) {
     collision_wait--;
   }
-    
+  
+  
   //draw projected contours
   background(0);
   for (int i=0; i<projectedContours.size(); i++) {
@@ -171,10 +172,15 @@ void draw() {
     ball.move();
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
+<<<<<<< HEAD
       if (ball != null) {
         //println(ball);
         ball.detectCollision(bricks[i]);
       }
+=======
+      int add_points = ball.detectCollision(bricks[i]);
+      cur_score += add_points;
+>>>>>>> 7fcd1499e5cf6394a69e30cd5da93257f1854827
       if (bricks[i].broken)
         bricksBroken++;
     }
@@ -264,29 +270,32 @@ void keyPressed() {
 //initialize all game objects
 void initialize() {
 //  ball = new Ball(new Vector(0,50), new Vector(10,-10), 10, color(0,0,255));
-  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255));
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255), 1);
   paused = false;
   paused_for_help = false;
   gameOver = false;
   at_main_menu = true;
   at_instructions_page = false;
-  interval = 1;
-  
+  interval = 5;
   lives = 3;
-  
+  total_points = 0;
+  cur_score = 0;
   playgame_X = (width/2) - 60;
   playgame_Y = (height/2) + 45;
   help_X = playgame_X;
-  help_Y = playgame_Y + 45;
+  help_Y = playgame_Y + 70;
   help_back_X = help_X;
   help_back_Y = help_Y + 45;
-  button_width = 120;
-  button_height = 30;
+  button_width = 150;
+  button_height = 60;
   
   if (levelComplete && level < 3)
     level++;
  
   bricks = manager.loadLevel(level);
+  for (int i = 0; i < bricks.length; i++) {
+    total_points += bricks[i].hardness * 10; 
+  }
 }
 
 //determine whether the ball has reached the bottom of the screen
@@ -312,7 +321,7 @@ void pauseGame() {
 
 void help() {
   paused_for_help = true;
-  text("                        Instructions\nPlayer 1: Press [a] & [d] to move paddle.\nPlayer 2: Use arrow keys to move paddle.\nPress [p] to pause.\nPress [x] to return to game.", width/2 - 142, height/2 - 30);
+  text("                        Instructions\nThis is the classic brick breaker game with a twist.\nInstead of keyboard controlled paddles,\nyou can use your hands to hit the ball anywhere!\nSome bricks will need more than 1 hit to be destroyed.\nWhat are you waiting for, go and have some fun!", width/2 - 145, height/2 - 45);
   noLoop();
 }
  
@@ -337,7 +346,7 @@ void completeLevel() {
 
 //draws balls on the side of the screen to represent the number of lives remaining
 void drawLives() {
-  int rad = 10;
+  int rad = 15;
   for (int i = 0; i < lives; i++) {
     fill(255);
     ellipse(width-20,(i*20) + rad, rad, rad);   
