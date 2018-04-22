@@ -31,7 +31,7 @@ class Ball {
       velocity.y *= -1 * speedup;
     }
     // adjust to change how fast ball speeds up
-    speedup += .001
+    speedup += .001;
   }
  
   //return ball's location

@@ -60,7 +60,7 @@ void setup() {
   
   //set up game
   
-  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255));
+  ball = new Ball(new Vector(20, 100), new Vector(8, 10), 18, color(0,255,255),1);
   textFont(createFont("Arial", 16, true));
   level = 1;
   manager = new LevelManager(displayWidth, displayHeight);
@@ -172,15 +172,15 @@ void draw() {
     ball.move();
     for (int i = 0; i < bricks.length; i++) {
       bricks[i].display();
-<<<<<<< HEAD
+//<<<<<<< HEAD
       if (ball != null) {
         //println(ball);
         ball.detectCollision(bricks[i]);
       }
-=======
+//=======
       int add_points = ball.detectCollision(bricks[i]);
       cur_score += add_points;
->>>>>>> 7fcd1499e5cf6394a69e30cd5da93257f1854827
+//>>>>>>> 7fcd1499e5cf6394a69e30cd5da93257f1854827
       if (bricks[i].broken)
         bricksBroken++;
     }
