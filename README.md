@@ -9,7 +9,7 @@ This project is an augmented rock climbing game that makes use of the Microsoft 
 - Implemented a Brickbreaker game with static bricks and a bouncing ball, as well as collision detection algorithms such that the ball moves appropriately around the screen.
 - Implemented double-hit bricks that require two ball hits to vanish. These bricks begin with a yellow color, and turn red after they have been hit once.
 - Added a home screen with buttons to start the game or view instructions for how to play the game.
-- Added adjustable timer between when the player presses the 'start game' button and when the game actually begins.
+- Added adjustable countdown between when the player presses the 'start game' button and when the game actually begins to ensure that the player has enough time to get ready.
 - Perform skeletal tracking on the climber through the Microsoft Kinect and project the climber's tracke body onto the climbing wall to detect inconsistencies between the climber's true body position and the algorithm's perceived body position.
 - Integrated library to allow player to calibrate the projector with the Kinect.
 - Added scoring to the game and a transition screen such that on gameover, the score is displayed to the player.
@@ -35,7 +35,7 @@ The user must have:
 - Microsoft Kinect USB Adapter
 - [Processing 2.0](https://processing.org/)
 - A laptop/computer
-- Officially tested and running on MacOSX 10.11 - 10.13 El Capitan
+- Officially tested and running on MacOSX 10.11 (El Capitan) to 10.13 (High Sierra)
 
 ### Dependent libraries
 
